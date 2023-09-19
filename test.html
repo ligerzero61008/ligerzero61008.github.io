@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>My JavaScript test</title>
+    <style>
+      button {
+        font-family: "helvetica neue", helvetica, sans-serif;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-align: center;
+        border: 2px solid rgb(200 200 0 / 0.6);
+        background: rgba(0, 217, 217, 0.6);
+        color: rgb(100 0 0 / 1);
+        box-shadow: 1px 1px 2px rgb(0 0 200 / 0.4);
+        border-radius: 10px;
+        padding: 3px 10px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body style="height=100%; margin:0px;">
+    <button type="button">Player 1: Chris</button>
+    <script src="/scripts/tmi.min.js"></script>
+    <script>
+      const button = document.querySelector("button");
+
+      button.addEventListener("click", updateName);
+      
+      function updateName() {
+        const name = prompt("Enter a new name");
+        button.textContent = `Player 1: ${name}`;
+      }
+    </script>
+    
+    <!input type="file" id="file-selector">
+    <script>/*
+      const fileSelector = document.getElementById('file-selector');
+      fileSelector.addEventListener('change', (event) => {
+        const fileList = event.target.files;
+        prompt(fileList.toString());
+      });*/
+      let fileHandle;
+        butOpenFile.addEventListener('click', async () => {
+        // Destructure the one-element array.
+        [fileHandle] = await window.showOpenFilePicker();
+        // Do something with the file handle.
+      });
+    </script>
+    
+    <img style="display: block;-webkit-user-select: none;margin: auto;"
+         id="Offering"
+         src="https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_a9ffda55713e4d9188219bfb198bdd42/default/dark/3.0"
+         alt="renkoSpin"
+    >
+    <script>
+      async function getTheFile() {
+        // open file picker
+        const [fileHandle] = await window.showOpenFilePicker();
+        // get file contents
+        const fileData = await fileHandle.getFile();
+        return fileData.text();
+      }
+      var data = getTheFile();
+
+      moveImg();
+      function moveImg(){
+        var Offerings = document.getElementById('Offering');
+        Offerings.src = "https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_ab446cbfd1c24829af7bd8087f6f2f68/default/dark/3.0";
+      }
+    </script>
+  </body>
+</html>
