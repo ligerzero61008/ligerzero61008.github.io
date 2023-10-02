@@ -21,8 +21,6 @@
     </style>
   </head>
   <body style="height=100%; margin:0px;">
-    <button type="button">Player 1: Chris</button>
-    <script src="/scripts/tmi.min.js"></script>
     <script>/*
       const button = document.querySelector("button");
 
@@ -41,33 +39,75 @@
         const fileList = event.target.files;
         prompt(fileList.toString());
       });*/
-      let fileHandle;
-        butOpenFile.addEventListener('click', async () => {
-        // Destructure the one-element array.
-        [fileHandle] = await window.showOpenFilePicker();
-        // Do something with the file handle.
-      });
     </script>
     
     <img style="display: block;-webkit-user-select: none;margin: auto;"
          id="Offering"
-         src="https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_a9ffda55713e4d9188219bfb198bdd42/default/dark/3.0"
+         src="https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_ab446cbfd1c24829af7bd8087f6f2f68/default/dark/3.0"
          alt="renkoSpin"
     >
+    <textarea id="tx"></textarea>
+    <script src="scripts\require.js"></script>
     <script>
-      async function getTheFile() {
-        // open file picker
-        const [fileHandle] = await window.showOpenFilePicker();
-        // get file contents
-        const fileData = await fileHandle.getFile();
-        return fileData.text();
-      }
-      var data = getTheFile();
-
+      require.config({
+        waitSeconds : 2,
+        paths : {
+          text : 'C:\Users\HWEI\bower_components\requirejs-plugins\lib\text', //text is required
+          json : 'C:\Users\HWEI\bower_components\requirejs-plugins\src\json' //alias to plugin
+          }
+      });
+      var textArea = document.getElementById('tx');
+      
+      require([".\emotes.json"], function (data) {
+        //textArea.value = data.stringify();
+        textArea.value = "data";
+      });
+      
+      //textArea.value = jsonFile;
       moveImg();
       function moveImg(){
         var Offerings = document.getElementById('Offering');
-        Offerings.src = "https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_ab446cbfd1c24829af7bd8087f6f2f68/default/dark/3.0";
+        
+        Offerings.addEventListener('click', async () => {
+          const pickerOpts = {
+            types: [{
+                description: "TEXT",
+                accept: {
+                "txt/*": [".txt", ".json"],
+                },
+            },],
+            excludeAcceptAllOption: true,
+            multiple: false,
+          };
+          // Destructure the one-element array.
+          const [fileHandle] = await window.showOpenFilePicker(pickerOpts);
+          // Do something with the file handle.
+          const fileData = await fileHandle.getFile();
+          const Reader = await fileData.stream().getReader();
+          const utf8Decoder = new TextDecoder("utf-8");
+          
+          let { value: chunk, done: readerDone } = await Reader.read();
+          var result = "";
+          
+          for (;!readerDone;){
+            let c = utf8Decoder.decode(chunk, { stream: true })
+            result += c;
+            ({ value: chunk, done: readerDone } = await Reader.read());
+          }
+          
+          var i = result.indexOf(":"), j;
+          var eId = "";
+          
+          for (;i>0;){
+            j = result.indexOf(",", i+1);
+            if (j==-1) j = result.length;
+            
+            eId = result.substring(i+1,j);
+            i = result.indexOf(":", i+1);
+          };
+          textArea.value = eId;
+          Offerings.src = "https://static-cdn.jtvnw.net/emoticons/v2/"+eId+"/default/dark/3.0";
+        });
       }
     </script>
   </body>
